@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>VoyageAI — AI Travel Planner</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <!-- Background decoration -->
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
+
+    <!-- =========================================================
+         HEADER
+    ========================================================== -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-icon">
+                ✦
+            </div>
+
+            <div>
+                <div class="brand-name">Voyage<span>AI</span></div>
+                <div class="brand-subtitle">Intelligent Travel Planner</div>
+            </div>
+        </div>
+
+        <div class="header-status">
+            <span class="status-dot"></span>
+            AI Travel Agents Online
+        </div>
+
+    </header>
+
+
+    <!-- =========================================================
+         MAIN
+    ========================================================== -->
+    <main class="container">
+
+        <!-- Hero -->
+        <section class="hero">
+
+            <div class="hero-badge">
+                <span>✈</span>
+                MULTI-AGENT TRAVEL PLANNER
+            </div>
+
+            <h1>
+                Plan your next journey
+                <span>with AI.</span>
+            </h1>
+
+            <p>
+                Flights, hotels and a personalized itinerary —
+                researched and organized by intelligent travel agents.
+            </p>
+
+        </section>
+
+
+        <!-- =====================================================
+             TRAVEL REQUEST CARD
+        ====================================================== -->
+        <section class="planner-card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>Where do you want to go?</h2>
+
+                    <p>
+                        Describe your trip naturally. Our AI agents will
+                        handle the planning.
+                    </p>
+                </div>
+
+                <div class="ai-orb">
+                    <span>✦</span>
+                </div>
+
+            </div>
+
+
+            <form id="travelForm">
+
+                <div class="textarea-wrapper">
+
+                    <textarea
+                        id="travelQuery"
+                        name="travelQuery"
+                        rows="5"
+                        maxlength="2000"
+                        placeholder="Example: Plan a 5-day trip from Chennai to Delhi for 2 people in September. My budget is ₹50,000. I prefer comfortable hotels near major attractions."
+                        required
+                    ></textarea>
+
+                    <div class="textarea-footer">
+
+                        <span id="charCount">
+                            0 / 2000
+                        </span>
+
+                        <button
+                            type="button"
+                            id="clearBtn"
+                            class="clear-btn"
+                        >
+                            Clear
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Quick prompts -->
+                <div class="quick-prompts">
+
+                    <span>Try an example:</span>
+
+                    <button
+                        type="button"
+                        class="quick-prompt"
+                        data-query="Plan a 5-day trip from Chennai to Delhi for 2 people with a budget of ₹50,000. Include flights, hotels and a practical day-by-day itinerary."
+                    >
+                        🏛 Delhi Trip
+                    </button>
+
+                    <button
+                        type="button"
+                        class="quick-prompt"
+                        data-query="Plan a 3-day romantic trip to Goa for a couple with a budget of ₹35,000. Suggest flights, hotels and a relaxed itinerary."
+                    >
+                        🌴 Goa Couple Trip
+                    </button>
+
+                    <button
+                        type="button"
+                        class="quick-prompt"
+                        data-query="Plan a 4-day family trip to Kerala for 4 people. Suggest comfortable hotels, transportation, sightseeing and an approximate budget."
+                    >
+                        🌿 Kerala Family Trip
+                    </button>
+
+                </div>
+
+
+                <div class="form-bottom">
+
+                    <div class="privacy-note">
+                        <span>🔒</span>
+                        Your travel request is processed securely.
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="planBtn"
+                        class="plan-btn"
+                    >
+                        <span class="btn-icon">✦</span>
+                        <span id="planBtnText">Plan My Trip</span>
+                        <span class="arrow">→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- =====================================================
+             AGENT PIPELINE
+        ====================================================== -->
+        <section
+            id="agentSection"
+            class="agent-section hidden"
+        >
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="eyebrow">LIVE WORKFLOW</span>
+                    <h2>Our AI agents are planning your trip</h2>
+                </div>
+
+                <span id="workflowStatus" class="workflow-status">
+                    Processing
+                </span>
+
+            </div>
+
+
+            <div class="agent-pipeline">
+
+                <!-- Flight -->
+                <div
+                    class="agent-card"
+                    id="flightAgent"
+                    data-agent="flight"
+                >
+
+                    <div class="agent-icon flight-icon">
+                        ✈
+                    </div>
+
+                    <div class="agent-info">
+                        <h3>Flight Agent</h3>
+                        <p>Searching flight information</p>
+                    </div>
+
+                    <div class="agent-state">
+                        <span class="agent-spinner"></span>
+                    </div>
+
+                </div>
+
+
+                <div class="pipeline-line"></div>
+
+
+                <!-- Hotel -->
+                <div
+                    class="agent-card"
+                    id="hotelAgent"
+                    data-agent="hotel"
+                >
+
+                    <div class="agent-icon hotel-icon">
+                        🏨
+                    </div>
+
+                    <div class="agent-info">
+                        <h3>Hotel Agent</h3>
+                        <p>Finding suitable stays</p>
+                    </div>
+
+                    <div class="agent-state">
+                        <span class="agent-spinner"></span>
+                    </div>
+
+                </div>
+
+
+                <div class="pipeline-line"></div>
+
+
+                <!-- Itinerary -->
+                <div
+                    class="agent-card"
+                    id="itineraryAgent"
+                    data-agent="itinerary"
+                >
+
+                    <div class="agent-icon itinerary-icon">
+                        🗺
+                    </div>
+
+                    <div class="agent-info">
+                        <h3>Itinerary Agent</h3>
+                        <p>Building your travel plan</p>
+                    </div>
+
+                    <div class="agent-state">
+                        <span class="agent-spinner"></span>
+                    </div>
+
+                </div>
+
+
+                <div class="pipeline-line"></div>
+
+
+                <!-- Final -->
+                <div
+                    class="agent-card"
+                    id="finalAgent"
+                    data-agent="final"
+                >
+
+                    <div class="agent-icon final-icon">
+                        ✦
+                    </div>
+
+                    <div class="agent-info">
+                        <h3>Final Agent</h3>
+                        <p>Preparing your recommendations</p>
+                    </div>
+
+                    <div class="agent-state">
+                        <span class="agent-spinner"></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             RESULTS
+        ====================================================== -->
+        <section
+            id="resultsSection"
+            class="results-section hidden"
+        >
+
+            <div class="results-header">
+
+                <div>
+                    <span class="eyebrow">YOUR AI TRAVEL PLAN</span>
+                    <h2>Your journey is ready</h2>
+                </div>
+
+                <button
+                    id="newTripBtn"
+                    class="secondary-btn"
+                >
+                    + Plan Another Trip
+                </button>
+
+            </div>
+
+
+            <!-- Final response -->
+            <div
+                id="finalResponseCard"
+                class="final-response-card"
+            >
+
+                <div class="result-card-top">
+
+                    <div class="result-title">
+
+                        <div class="result-icon">
+                            ✦
+                        </div>
+
+                        <div>
+                            <span class="result-label">
+                                AI RECOMMENDATION
+                            </span>
+
+                            <h3>Complete Travel Plan</h3>
+                        </div>
+
+                    </div>
+
+                    <button
+                        id="copyBtn"
+                        class="copy-btn"
+                        title="Copy travel plan"
+                    >
+                        ⧉ Copy
+                    </button>
+
+                </div>
+
+                <div
+                    id="finalResponse"
+                    class="final-response"
+                ></div>
+
+            </div>
+
+
+            <!-- Summary cards -->
+            <div class="result-grid">
+
+                <!-- Flights -->
+                <article class="result-card">
+
+                    <div class="result-card-header">
+
+                        <div class="mini-icon flight-mini">
+                            ✈
+                        </div>
+
+                        <div>
+                            <span>FLIGHTS</span>
+                            <h3>Flight Information</h3>
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="flightResult"
+                        class="result-content"
+                    >
+                        No flight information available.
+                    </div>
+
+                </article>
+
+
+                <!-- Hotels -->
+                <article class="result-card">
+
+                    <div class="result-card-header">
+
+                        <div class="mini-icon hotel-mini">
+                            🏨
+                        </div>
+
+                        <div>
+                            <span>STAYS</span>
+                            <h3>Hotel Suggestions</h3>
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="hotelResult"
+                        class="result-content"
+                    >
+                        No hotel information available.
+                    </div>
+
+                </article>
+
+
+                <!-- Itinerary -->
+                <article class="result-card itinerary-result-card">
+
+                    <div class="result-card-header">
+
+                        <div class="mini-icon itinerary-mini">
+                            🗺
+                        </div>
+
+                        <div>
+                            <span>TRIP PLAN</span>
+                            <h3>Day-by-Day Itinerary</h3>
+                        </div>
+
+                    </div>
+
+                    <div
+                        id="itineraryResult"
+                        class="result-content"
+                    >
+                        No itinerary available.
+                    </div>
+
+                </article>
+
+            </div>
+
+
+            <!-- Recommendation -->
+            <div class="bottom-note">
+
+                <div class="note-icon">💡</div>
+
+                <div>
+                    <strong>Travel smarter</strong>
+
+                    <p>
+                        Flight availability and ticket prices can change
+                        quickly. Always verify live availability and final
+                        prices before booking.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             ERROR
+        ====================================================== -->
+        <div
+            id="errorBox"
+            class="error-box hidden"
+        >
+            <div class="error-icon">!</div>
+
+            <div>
+                <strong>Something went wrong</strong>
+                <p id="errorMessage">
+                    Unable to process your travel request.
+                </p>
+            </div>
+
+            <button id="closeError">×</button>
+        </div>
+
+    </main>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================== -->
+    <footer class="footer">
+
+        <div>
+            VoyageAI
+        </div>
+
+        <span>
+            Powered by AI • Travel smarter
+        </span>
+
+    </footer>
+
+
+    <script src="/static/script.js"></script>
+
+</body>
+</html>
